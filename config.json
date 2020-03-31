@@ -1,0 +1,21 @@
+{
+    "token" : "",
+    "prefix" : "c!",
+    "serveradmin" : [
+        "249474587530625034", 
+        "520796307049283584" 
+    ],
+    "emojies" : {
+        "no_access": "⛔",
+        "camera": "📷",
+        "inbox_tray": "📥",
+        "outbox_tray": "📤",
+        "gear": "⚙",
+        "helmet": "⛑",
+        "back": "↩",
+        "close": "❌",
+        "tool": "🛠",
+        "book": "📗",
+        "fun": "😂"
+        }
+}
