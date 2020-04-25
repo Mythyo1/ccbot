@@ -56,6 +56,6 @@ module.exports = {
     },
 
     xp: function() {
-        return Math.floor(Math.random() * 12) + 5;
+        Math.floor(Math.random() * 12) + 5;
     }
-}; 
+};

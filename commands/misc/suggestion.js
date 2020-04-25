@@ -39,7 +39,7 @@ module.exports = {
             .then(async (msg) => {
               await msg.react('⬆️');
               await msg.react('⬇️');
-              if (message.channel.id !== channel.id) await message.channel.send(`<@${message.author.id}>, your suggestion has been sent to the developers.`) 
+              if (message.channel.id !== channel.id) await message.channel.send(`<@${message.author.id}>, your suggestion has been sent to <#692030022650953897>.`) 
               await webhook.delete();
               if (message.channel.id === channel.id) message.delete().catch(() => {});
             });

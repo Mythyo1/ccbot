@@ -12,21 +12,20 @@ module.exports = {
     description: "Check your level",
     usage: "[command | alias] [member]",
     run: async (bot, message, args, con) => {
-        let m = message.mentions.members.first()
-        if(!m) m = bot.users.get(message.author.id)
-        console.log(`${m.id} ${m.username}`)
-        const row = con.prepare('SELECT * FROM users WHERE userid = ?').get(m.id)
+        const m = getMember(message, args[0]);
+        const row = await con.prepare('SELECT * FROM users WHERE userid = ?').get(m.id)
         if(!row) return message.channel.send("You're not ranked! Send a message to get ranked!")
-        const lvl = con.prepare('SELECT level FROM users WHERE userid = ?').get(m.id)
-        const totalxp = con.prepare('SELECT xp FROM users WHERE userid = ?').get(m.id)
+        const lvl = await con.prepare('SELECT level FROM users WHERE userid = ?').get(m.id)
+        const totalxp = await con.prepare('SELECT xp FROM users WHERE userid = ?').get(m.id)
         const txp = Math.pow((3 * (lvl.level + 1)), 2)
-        const xp = totalxp.xp - txp
+        console.log(`Level + 1: ${lvl.level + 1} TotalXP: ${totalxp.xp}`)
+        const member = bot.users.get(m.id)
         
         const e = new Discord.RichEmbed()
         .setTitle(`${member.username}'s Stats!`)
         .setColor("RANDOM")
         .addField("**Level:** ", lvl.level, true)
-        .addField("**XP:** ", `${xp}/${txp}`)
+        .addField("**XP:** ", `${totalxp.xp}/${txp}`)
         message.channel.send(e)
     }
 }

@@ -4,6 +4,7 @@ const config = require("./config.json");
 const mysql = require("mysql");
 const ascii = require("ascii-table");
 const { xp } = require("./functions.js");
+const Canvas = require('canvas');
 
 const Database = require('./handlers/Database');
 const con = new Database({
@@ -30,13 +31,10 @@ bot.on("ready", async () => {
     // const general = bot.channels.get('690800479634194463');
     const Welcome = bot.channels.get('690226792941879302');
 
-    bot.on("guildMemberAdd", (member) => {
+    bot.on("guildMemberAdd", async (member) => {
         Welcome.send(`Welcome ${member} to ${member.guild}. Have a read off <#690226887456325696>`) // Send message to general text channel
     });
 
-    // bot.on("guildMemberRemove", (member) => {
-    //     general.send(`${member} we hope you enjoyed your stay on, ${member.guild}!`)
-    // });
 
     bot.on('message', async (message) => {  
     
@@ -54,22 +52,24 @@ bot.on("ready", async () => {
 
         if (!message.content.startsWith(prefix)) {
             const nowxp = await con.prepare('SELECT xp FROM users WHERE userid = ?').get(message.author.id);
-            con.prepare('UPDATE users SET xp = ? WHERE userid = ?').run(xp() + nowxp.xp, message.author.id);
+            let newxp = xp() + nowxp.xp
+            con.prepare('UPDATE users SET xp = ? WHERE userid = ?').run(newxp, message.author.id);
 
             const lvl = await con.prepare('SELECT level FROM users WHERE userid = ?').get(message.author.id);
             let lvlup = Math.pow((3 * (lvl.level + 1)), 2)
-            if(lvl.level == 0) lvlup = 15
             const checkxp = await con.prepare('SELECT xp FROM users WHERE userid = ?').get(message.author.id);
+            console.log(`checkxp.xp = ${checkxp.xp} | lvlup = ${lvlup} | nowxp.xp = ${nowxp.xp}`)
 
             if (checkxp.xp >= lvlup) {
                 const nowlvl = await con.prepare('SELECT level FROM users WHERE userid = ?').get(message.author.id);
                 con.prepare('UPDATE users SET level = ? WHERE userid = ?').run(nowlvl.level += 1, message.author.id);
+                con.prepare('UPDATE users SET xp = ? WHERE userid = ?').run(0, message.author.id);
                 const e = new Discord.RichEmbed()
                 .setTitle(`${message.author.username} has leveled up!`)
                 .setColor("RANDOM")
                 .setFooter('Continue Chatting!', message.author.displayAvatarURL)
                 .setTimestamp();
-                message.channel.send(e).then(message.react('🆙'));
+                message.channel.send(e).then(message.react('🆙'))
             } else {
                 return;
             }
@@ -93,4 +93,3 @@ bot.on("ready", async () => {
 
 
 bot.login(config.token)
-

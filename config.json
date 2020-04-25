@@ -1,9 +1,8 @@
 {
-    "token" : "",
+    "token" : "TOKEN",
     "prefix" : "c!",
     "serveradmin" : [
-        "249474587530625034", 
-        "520796307049283584" 
+        "userid"
     ],
     "emojies" : {
         "no_access": "⛔",
