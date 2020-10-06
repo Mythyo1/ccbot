@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-bot.commands = new Discord.Collection();
+const commands = new Discord.Collection();
 var util = require('bot-utils')
 const fs = require('fs')
 
